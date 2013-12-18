@@ -1,0 +1,46 @@
+---
+title: Test
+---
+The table has {{site.data.example.rows}} rows (not including headers).
+
+The table has {{site.data.example.cols}} columns.
+
+This is the table:
+
+<table>
+  <thead>
+    <tr>
+      {% for header in site.data.example.keys %}
+      <td>{{header}}</td>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in site.data.example.content %}
+    <tr>
+      {% for column in row %}
+      <td>{{column}}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+And this is the table with only first and third columns:
+
+<table>
+  <thead>
+    <tr>
+      <td>h1</td>
+      <td>h3</td>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in site.data.example.content_hash %}
+    <tr>
+      <td>{{row.h1}}</td>
+      <td>{{row.h3}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

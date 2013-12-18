@@ -1,0 +1,87 @@
+h1. Jekyll CSV Data Reader Plugin
+
+This plugin makes data in csv tables available in "Jekyll":http://www.jekyll.com, similar to what "Jekyll":http://jekyllrb.com already does with YAML files.
+
+h1. Installation
+
+Download @read_csv.rb@ and put it in the @_plugins@ directory of your website.
+
+h1. Usage
+
+This plugin reads all csv files found in the @_csv@ directory and, for each file <<name>>.csv it makes the following information available for use with Liquid:
+
+* @site.data.<<name>>.rows@
+* @site.data.<<name>>.cols@
+* @site.data.<<name>>.keys@
+* @site.data.<<name>>.content@
+* @site.data.<<name>>.content_hash@
+
+where: 
+
+* @rows@ and @cols@ contain, respectively, the number of rows (without headers) and the number of columns of the table
+* @keys@ is an array containing the header of the table
+* @content@ is an array of arrays containing the table data
+* @content_hash@ is an array of hashes, to access data using the columns names set in the header.
+
+h1. Example
+
+Suppose you have an @example.csv@ file stored in the @_csv@ directory of your Jekyll website, with the following content:
+
+<pre>
+ h1,h2,h3
+ a,b,c
+ 1,2,3
+</pre>
+
+Then, the following Jekyll template generates an HTML representation of the table:
+
+<pre>
+---
+title: Example
+---
+<table>
+  <thead>
+    <tr>
+    {% for header in site.data.example.keys %}
+      <td>{{header}}</td>
+    {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in site.data.example.content %}
+    <tr>
+    {% for column in row %}
+      <td>{{column}}</td>
+    {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</pre>
+
+If you prefer to access cells using header names, you can use the @content_hash@ key.  For instance, the following snippet extracts the content of column @h1@ and @h3@ from the table:
+
+<pre>
+{% for row in site.data.example.content_hash %}
+<tr>
+  <td>{{row.h1}}</td>
+  <td>{{row.h3}}</td>
+</tr>
+{% endfor %}
+</pre>
+
+See the @example@ directory for more details.
+
+h1. Alternatives
+
+Store the table data you want to access in @_data@, as a YAML file.
+
+h1. Known Bugs
+
+The plugin does not check for name clashes of files stored @_data@ and @_csv@ directory.  *Do not use the same name for files in @_data@ and @_csv@*. 
+
+In other words, if you have a @_data/w.yaml@ file, do not create a @_csv/w.csv@ file.
+
+h1. License
+
+Distributed under the terms of the "MIT License":http://opensource.org/licenses/MIT
