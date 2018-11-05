@@ -87,8 +87,8 @@ module CSVDataReader
 
         csv_data = Hash.new
         csv_data[key] = data
-
-        site.data.merge!(csv_data)
+       
+        site.data.merge!(csv_data){ |shared_key| raise "csv and data named \"#{shared_key}\"" }
       end
     end
    
